@@ -12,7 +12,17 @@ const connection = await mysql.createConnection(config)
 
 export async function getProducts() {
   const products = await connection.query(
-    'SELECT * from Products limit 10;'
+    'SELECT * from Products;'
+  )
+
+  return products[0]
+}
+
+export async function getProductsLimit({ limit, offset }) {
+  const products = await connection.query(
+    `SELECT * from Products 
+    LIMIT ? 
+    OFFSET ?;`, [parseInt(limit), parseInt(offset)]
   )
 
   return products[0]
