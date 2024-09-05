@@ -8,6 +8,6 @@ export async function getProducts() {
 }
 
 export async function getProductsLimit({ limit, offset }) {
-  const products = await prisma.products.findMany({ take: limit, skip: offset })
+  const products = await prisma.products.findMany({ take: parseInt(limit), skip: parseInt(offset) })
   return products
 }
