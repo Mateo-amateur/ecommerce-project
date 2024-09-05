@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Categories {
+  CategoryID   Int        @id @default(autoincrement())
+  CategoryName String?
+  Description  String?
+  Products     Products[]
+}
+
+model Customers {
+  CustomerID   Int      @id @default(autoincrement())
+  CustomerName String?
+  ContactName  String?
+  Address      String?
+  City         String?
+  PostalCode   String?
+  Country      String?
+  Orders       Orders[]
+}
+
+model Employees {
+  EmployeeID Int       @id @default(autoincrement())
+  LastName   String?
+  FirstName  String?
+  BirthDate  DateTime?
+  Photo      String?
+  Notes      String?
+  Orders     Orders[]
+}
+
+model Shippers {
+  ShipperID   Int      @id @default(autoincrement())
+  ShipperName String?
+  Phone       String?
+  Orders      Orders[]
+}
+
+model Suppliers {
+  SupplierID   Int        @id @default(autoincrement())
+  SupplierName String?
+  ContactName  String?
+  Address      String?
+  City         String?
+  PostalCode   String?
+  Country      String?
+  Phone        String?
+  Products     Products[]
+}
+
+model Products {
+  ProductID    Int            @id @default(autoincrement())
+  ProductName  String?
+  SupplierID   Int?
+  CategoryID   Int?
+  Unit         String?
+  Price        Decimal?       @default(0)
+  OrderDetails OrderDetails[]
+  Suppliers    Suppliers?     @relation(fields: [SupplierID], references: [SupplierID], onDelete: NoAction, onUpdate: NoAction)
+  category     Categories?    @relation(fields: [CategoryID], references: [CategoryID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model Orders {
+  OrderID      Int            @id @default(autoincrement())
+  CustomerID   Int?
+  EmployeeID   Int?
+  OrderDate    DateTime?
+  ShipperID    Int?
+  OrderDetails OrderDetails[]
+  Shippers     Shippers?      @relation(fields: [ShipperID], references: [ShipperID], onDelete: NoAction, onUpdate: NoAction)
+  Customers    Customers?     @relation(fields: [CustomerID], references: [CustomerID], onDelete: NoAction, onUpdate: NoAction)
+  Employees    Employees?     @relation(fields: [EmployeeID], references: [EmployeeID], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model OrderDetails {
+  OrderDetailID Int       @id @default(autoincrement())
+  OrderID       Int?
+  ProductID     Int?
+  Quantity      Int?
+  Products      Products? @relation(fields: [ProductID], references: [ProductID], onDelete: NoAction, onUpdate: NoAction)
+  Orders        Orders?   @relation(fields: [OrderID], references: [OrderID], onDelete: NoAction, onUpdate: NoAction)
+}

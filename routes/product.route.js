@@ -1,5 +1,6 @@
 import { Router } from "express"
-import { getProducts, getProductsLimit } from "../models/mysql.js"
+import { getProductsLimit } from "../models/mysql.js"
+import { getProducts } from "../models/sqlite.js"
 
 const router = Router()
 
